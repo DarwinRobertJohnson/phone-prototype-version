@@ -1,115 +1,81 @@
 
+specification={}
+var phoneObject
 
-var val="";
-var queue=["phone"];
-
-const phone={
-    call:function(){
-        console.log("Hence called");
-    },
-    message:function(){
-        console.log("Hence messaged");
-    }
+function call(){
+    console.log('call successfully done!');
 }
 
-const basic={
-    name:"basic",
-};
-
-const singleSim={
-    name:"singleSim",
-};
-
-const dualSim={
-    name:"dualSim",
-};
-
-const smart={
-    name:"smart",
-};
-
-const android={
-    name:"android",
-};
-
-const IOS={
-    name:"IOS",
-};
-
-
-const dict={"phone":phone,
-            "basic":basic,
-            "singleSim":singleSim,
-            "dualSim":dualSim,
-            "smart":smart,
-            "android":android,
-            "IOS":IOS
-        }
-
-/*
-    Literal Declaration Over
-*/
-
-function setHidden(val){
-
-    (val==="smart")?val="basic":val="smart";
-
-    $(`.${val}-options`).css({
-        visibility: "hidden"
-    });
+function message(){
+    console.log("message successfully sent!");
 }
 
-function setVisible(val){
-    $(`.${val}-options`).css({
-        visibility: "visible"
-    });
-    setHidden(val);
 
+function basicPhone(simType){
+    this.simType=simType;
 }
 
-function addToQueue(val){
-    queue.unshift(val);    
+function smartPhone(osType){
+    this.osType=osType;
 }
 
-function constructObject(){
-    console.log(queue);
-    for(let i=0;i<queue.length-1;i++){
-        Object.setPrototypeOf(dict[queue[i]],dict[queue[i+1]]);
-    }
-    return dict[queue[0]];
+basicPhone.prototype.call=call;
+basicPhone.prototype.message=message;
+
+smartPhone.prototype.call=call;
+smartPhone.prototype.message=message;
+
+function setVisible(className,visible=true){
+    let state=(visible)?"visible":"hidden";
+    $(`.${className}`).css({
+        "visibility":state
+    })
 }
 
 /*
-    Helper Functions Declaration Over
+    Event handling
 */
-
-
 $("#phone-type input").click((event)=>{
-    queue.length=0;
-    queue.push("phone");
-    val=$("input:checked").val();
-    setVisible(val);
-    addToQueue(val);            //adds basic or smart to queue
+   specification["type"]=$("#phone-type input:checked").val();
+   if(specification["type"]=="smart"){
+    setVisible("smart")
+    setVisible("basic",false)
+    }else{
+        setVisible("basic")
+        setVisible("smart",false);
+    }
 
-    $(".operation").css({
-        visibility: "hidden"
-    });
 
-    $(`.${val}-options`).click((event)=>{
-
-        addToQueue($(`.${val}-options input:checked`).val());       //adds android or IOS to queue
-        $(".operation").css({
-            visibility: "visible"
-        });
-
-        $(".operation").click((event)=>{
-            let object=constructObject();                           //constructs the necessary object
-            let opt=$(".operation input:checked").val();
-            (opt=="call")? object.call():object.message();
-        });
-
-    });
 
 });
+
+$(".secondary input").click((event)=>{
+    specification["spec"]=$(`.${specification["type"]} input:checked`).val();
+    setPhoneObject();
+
+    setVisible("operation")
+});
+
+
+$(".operation input").click((event)=>
+{
+    let operation=$(".operation input:checked").val();
+    if(operation=="call")
+        phoneObject.call()
+    if(operation=="message")
+        phoneObject.message()
+}); 
+
+function setPhoneObject(){
+    
+    if(specification["type"]=="smart")
+         phoneObject=new smartPhone(specification["spec"])
+    else if(specification["type"]=="basic")
+         phoneObject=new basicPhone(specification["spec"])
+}
+
+
+
+
 
 
