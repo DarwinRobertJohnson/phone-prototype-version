@@ -10,20 +10,43 @@ function message(){
     console.log("message successfully sent!");
 }
 
+function phone(){
+    this.call=call
+    this.message=message
+}
+
+function singleSim(){
+    this.simType="singleSim"
+}
+
+function android(){
+    this.osType="android"
+}
+
+function IOS(){
+    this.osType="IOS"
+}
+
+function dualSim(){
+    this.simType="dualSim"
+}
 
 function basicPhone(simType){
-    this.simType=simType;
+    if(simType==="singleSim")
+        this.simType=new singleSim();
+    else if(simType==="dualSim")
+        this.simType=new dualSim();
+    this.phone=new phone();
 }
 
 function smartPhone(osType){
-    this.osType=osType;
+    if(osType==="android")
+        this.osType=new android();
+    else if(osType==="IOS")
+        this.osType=new IOS();
+    this.phone=new phone();
 }
 
-basicPhone.prototype.call=call;
-basicPhone.prototype.message=message;
-
-smartPhone.prototype.call=call;
-smartPhone.prototype.message=message;
 
 function setVisible(className,visible=true){
     let state=(visible)?"visible":"hidden";
@@ -61,9 +84,9 @@ $(".operation input").click((event)=>
 {
     let operation=$(".operation input:checked").val();
     if(operation=="call")
-        phoneObject.call()
+        phoneObject.phone.call()
     if(operation=="message")
-        phoneObject.message()
+        phoneObject.phone.message()
 }); 
 
 function setPhoneObject(){
@@ -72,6 +95,7 @@ function setPhoneObject(){
          phoneObject=new smartPhone(specification["spec"])
     else if(specification["type"]=="basic")
          phoneObject=new basicPhone(specification["spec"])
+    console.log(phoneObject)
 }
 
 
