@@ -18,7 +18,7 @@ function phone(){
 function singleSim(){
     this.simType="singleSim"
 }
-
+    
 function android(){
     this.osType="android"
 }
