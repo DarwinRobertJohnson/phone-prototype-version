@@ -12,50 +12,48 @@ phone.prototype.message=(target)=>{
     console.log(`message ${target}`)
 }
 
-function basicPhone(){
+function basicPhone(name,number){
+    phone.call(this,name,number)
     this.functionality="basic"
 }
 
 basicPhone.prototype=Object.create(phone.prototype)
 
-function smartPhone(){
+function smartPhone(name,number){
+    phone.call(this,name,number)
     this.functionality="smart"
 }
 smartPhone.prototype=Object.create(phone.prototype)
 
 
 function androidPhone(name,number=123456789){
-    phone.call(this,name,number)
-    smartPhone.call(this);
+    smartPhone.call(this,name,number);
     this.os="Android"
 }
 
 androidPhone.prototype=Object.create(smartPhone.prototype)
 
 function IOSPhone(name,number=123456789){
-    phone.call(this,name,number)
-    smartPhone.call(this);
+    smartPhone.call(this,name,number);
     this.os="IOS"
 }
 IOSPhone.prototype=Object.create(smartPhone.prototype)
 
 function singleSimPhone(name,phoneNumber=123456789){
-    phone.call(this,name,number)
-    basicPhone.call(this);
+    basicPhone.call(this,name,phoneNumber);
 }
 
 
 singleSimPhone.prototype=Object.create(basicPhone.prototype)
 
 function dualSimPhone(name,numberOne=123456789,numberTwo=987654321){
-    phone.call(this,name,numberOne)
-    basicPhone.call(this);
+    basicPhone.call(this,name,numberOne);
     this.numberTwo=numberTwo
 }
 dualSimPhone.prototype=Object.create(basicPhone.prototype)
 
 
-redmi=new androidPhone("DarwinDDragon",7603280319);
+redmi=new dualSimPhone("DarwinDDragon",7603280319);
 
 console.log(redmi);
 redmi.Call(123456789)
